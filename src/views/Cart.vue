@@ -12,9 +12,7 @@
           :price="product.price"
         />
       </div>
-      <div class="cart-info">
-        Итого: {{}}
-      </div>
+      <div class="cart-info">Итого: {{}}</div>
     </div>
   </div>
 </template>
@@ -28,10 +26,13 @@ export default {
     Card,
   },
 
-  data() {
-    return {
-      cartProducts: this.$store.state.cartProducts,
-    };
+  computed: {
+    products() {
+      return this.$store.state.products;
+    },
+    cartProducts() {
+      return this.products.filter((product) => !!product.inCart);
+    },
   },
 };
 </script>

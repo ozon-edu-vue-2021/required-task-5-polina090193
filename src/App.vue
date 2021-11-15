@@ -20,6 +20,11 @@
 <script>
 export default {
   name: "App",
+  created() {
+    this.$store.dispatch("getProducts").then((res) => {
+      this.$store.commit("setProducts", res);
+    });
+  },
 };
 </script>
 

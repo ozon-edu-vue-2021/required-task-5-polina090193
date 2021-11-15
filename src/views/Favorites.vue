@@ -22,7 +22,7 @@ export default {
     Card,
   },
 
-  data() {
+  /* data() {
     return {
       favoriteProducts: [],
     };
@@ -30,6 +30,6 @@ export default {
 
   created() {
     this.favoriteProducts = this.$store.state.favoriteProducts;
-  },
+  }, */
 };
 </script>

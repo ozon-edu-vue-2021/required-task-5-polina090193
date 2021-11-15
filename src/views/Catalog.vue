@@ -1,17 +1,17 @@
 <template>
   <div class="catalog">
     <h1 class="page-title">Каталог</h1>
-
     <div class="cards">
       <Card
         v-for="product of products"
         :key="product.id"
-        :image="
-          require('@/assets/images/' +
-            imagesNames[Math.floor(Math.random() * imagesNames.length)])
-        "
+        :image="product.image"
+        :price="product.price"
         :title="product.dish"
         :productID="product.id"
+        :inCart="product.inCart"
+        :isFavorite="product.isFavorite"
+        :quantity="product.quantity"
       />
     </div>
   </div>
@@ -25,28 +25,11 @@ export default {
   components: {
     Card,
   },
-  data() {
-    return {
-      products: [],
-    };
-  },
-
   computed: {
-    imagesNames() {
-      const data = require.context("@/assets/images", false, /^.*\.webp$/);
-      const images = data.keys().map((string) => string.slice(2));
-      return images;
+    products() {
+      return this.$store.state.products;
     },
   },
-
-  created() {
-    this.$store.dispatch("getProducts").then((res) => {
-      this.$store.commit("setProducts", res);
-      this.products = res;
-    });
-  },
-
-  methods: {},
 };
 </script>
 

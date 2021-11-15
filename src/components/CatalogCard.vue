@@ -7,11 +7,7 @@
         <Heart :isActive="isFavorite" @click.native="toggleFavorite" />
       </div>
       <span class="card__price">{{ price }} ₽</span>
-      <button
-        v-if="!inCart"
-        class="card__btn card__buy-btn"
-        @click="addToCart()"
-      >
+      <button v-if="!inCart" class="card__btn card__buy-btn" @click="addToCart">
         Купить
       </button>
       <div v-if="inCart" class="card__counter">
@@ -38,7 +34,6 @@ export default {
       type: Number,
       required: true,
     },
-
     title: {
       type: String,
       default: "Продукт без названия",
@@ -47,60 +42,39 @@ export default {
       type: String,
       default: "",
     },
-  },
-
-  data() {
-    return {
-      inCart: false,
-      quantity: 0,
-    };
-  },
-
-  computed: {
-    price: () => Math.floor(Math.random() * 1000),
-    isFavorite() {
-      return !!this.$store.state.favoriteProducts.find((item) => {
-        return item.id === this.productID;
-      });
+    price: {
+      type: Number,
+      default: 0,
+    },
+    inCart: {
+      type: Boolean,
+      default: false,
+    },
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },
+    quantity: {
+      type: Number,
+      default: 0,
     },
   },
 
   methods: {
     addToCart() {
-      this.$store.commit("addProductToCart", {
-        id: this.productID,
-        quantity: 1,
-        title: this.title,
-        image: this.image,
-        price: this.price,
-      });
-
-      this.inCart = true;
-      this.quantity = 1;
+      this.$store.commit("addProductToCart", this.productID);
     },
 
     quantityPlus() {
       this.$store.commit("quantityPlus", this.productID);
-      this.quantity++;
     },
 
     quantityMinus() {
-      this.quantity--;
-      if (this.quantity < 1) {
-        this.$store.commit("removeProductFromCart", this.productID);
-        this.inCart = false;
-      } else {
         this.$store.commit("quantityMinus", this.productID);
-      }
     },
 
     toggleFavorite() {
-      this.$store.commit("toggleFavoriteProduct", {
-        id: this.productID,
-        title: this.title,
-        image: this.image,
-        price: this.price,
-      });
+      this.$store.commit("toggleFavoriteProduct", this.productID);
     },
   },
 };

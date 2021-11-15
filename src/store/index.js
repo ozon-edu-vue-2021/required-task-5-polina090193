@@ -3,51 +3,74 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-const findProductIndexInArray = (id, arr) => {
-  return arr.findIndex((item) => item.id === id);
+const findProductByID = function (id, arr) {
+  return arr.find((item) => item.id === id);
 };
 
 export default new Vuex.Store({
   strict: true,
   state: () => ({
     products: [],
-    cartProducts: [],
-    favoriteProducts: [],
   }),
 
   mutations: {
     setProducts: (state, products) => {
+      const imagesData = require.context(
+        "@/assets/images",
+        false,
+        /^.*\.webp$/
+      );
+      const images = imagesData.keys().map((string) => string.slice(2));
+
+      products.forEach((product) => {
+        product.image = require("@/assets/images/" +
+          images[Math.floor(Math.random() * images.length)]);
+        product.price = Math.floor(Math.random() * 1000);
+        product.inCart = false;
+        product.quantity = 0;
+        product.isFavorite = false;
+      });
+
       state.products = products;
     },
 
-    addProductToCart: (state, product) => {
-      const index = findProductIndexInArray(product.id, state.cartProducts);
-      if (index === -1) {
-        state.cartProducts.push(product);
+    addProductToCart: (state, productID) => {
+      const product = findProductByID(productID, state.products);
+      if (product) {
+        product.inCart = true;
+        product.quantity = 1;
       }
     },
 
     removeProductFromCart: (state, productID) => {
-      const index = findProductIndexInArray(productID, state.cartProducts);
-      if (index !== -1) state.cartProducts.splice(index, 1);
+      const product = findProductByID(productID, state.products);
+      if (product && !!product.inCart) {
+        product.inCart = false;
+        product.quantity = 0;
+      }
     },
 
     quantityPlus: (state, productID) => {
-      const index = findProductIndexInArray(productID, state.cartProducts);
-      if (index !== -1) state.cartProducts[index].quantity++;
+      const product = findProductByID(productID, state.products);
+      if (product && !!product.inCart) {
+        product.quantity++;
+      }
     },
 
     quantityMinus: (state, productID) => {
-      const index = findProductIndexInArray(productID, state.cartProducts);
-      if (index !== -1) state.cartProducts[index].quantity--;
+      const product = findProductByID(productID, state.products);
+      if (product && !!product.inCart) {
+        product.quantity--;
+        if (product.quantity < 1) {
+          this.removeProductFromCart(productID);
+        }
+      }
     },
 
-    toggleFavoriteProduct: (state, product) => {
-      const index = findProductIndexInArray(product.id, state.favoriteProducts);
-      if (index === -1) {
-        state.favoriteProducts.push(product);
-      } else {
-        state.favoriteProducts.splice(index, 1);
+    toggleFavoriteProduct: (state, productID) => {
+      const product = findProductByID(productID, state.products);
+      if (product) {
+        product.isFavorite = !product.isFavorite;
       }
     },
   },
