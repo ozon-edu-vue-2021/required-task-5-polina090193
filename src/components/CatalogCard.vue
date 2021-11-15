@@ -70,7 +70,7 @@ export default {
     },
 
     quantityMinus() {
-        this.$store.commit("quantityMinus", this.productID);
+      this.$store.commit("quantityMinus", this.productID);
     },
 
     toggleFavorite() {
@@ -84,7 +84,7 @@ export default {
 .card {
   background-color: wheat;
   border-radius: 20px;
-  width: 210px;
+  width: 200px;
   height: 340px;
   overflow: hidden;
 }

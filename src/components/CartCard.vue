@@ -35,58 +35,43 @@ export default {
       type: Number,
       required: true,
     },
-
     title: {
       type: String,
       default: "Продукт без названия",
     },
-
     image: {
       type: String,
       default: "",
     },
-
     price: {
       type: Number,
       default: 0,
     },
-
+    inCart: {
+      type: Boolean,
+      default: false,
+    },
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },
     quantity: {
       type: Number,
-      default: 1,
-    },
-  },
-
-  computed: {
-    isFavorite() {
-      return !!this.$store.state.favoriteProducts.find((item) => {
-        return item.id === this.productID;
-      });
+      default: 0,
     },
   },
 
   methods: {
     quantityPlus() {
       this.$store.commit("quantityPlus", this.productID);
-      this.quantity++;
     },
 
     quantityMinus() {
-      this.quantity--;
-      if (this.quantity < 1) {
-        this.$store.commit("removeProductFromCart", this.productID);
-      } else {
-        this.$store.commit("quantityMinus", this.productID);
-      }
+      this.$store.commit("quantityMinus", this.productID);
     },
 
     toggleFavorite() {
-      this.$store.commit("toggleFavoriteProduct", {
-        id: this.productID,
-        title: this.title,
-        image: this.image,
-        price: this.price,
-      });
+      this.$store.commit("toggleFavoriteProduct", this.productID);
     },
   },
 };

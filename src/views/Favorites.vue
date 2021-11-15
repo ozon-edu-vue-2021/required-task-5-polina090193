@@ -6,8 +6,12 @@
         v-for="product of favoriteProducts"
         :key="product.id"
         :image="product.image"
-        :title="product.title"
+        :price="product.price"
+        :title="product.dish"
         :productID="product.id"
+        :inCart="product.inCart"
+        :isFavorite="product.isFavorite"
+        :quantity="product.quantity"
       />
     </div>
   </div>
@@ -22,14 +26,18 @@ export default {
     Card,
   },
 
-  /* data() {
-    return {
-      favoriteProducts: [],
-    };
+  computed: {
+    favoriteProducts() {
+      return this.$store.getters.getFavoriteProducts;
+    },
   },
-
-  created() {
-    this.favoriteProducts = this.$store.state.favoriteProducts;
-  }, */
 };
 </script>
+
+<style scoped>
+.favorite-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+</style>

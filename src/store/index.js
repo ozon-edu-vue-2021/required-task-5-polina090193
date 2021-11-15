@@ -42,14 +42,6 @@ export default new Vuex.Store({
       }
     },
 
-    removeProductFromCart: (state, productID) => {
-      const product = findProductByID(productID, state.products);
-      if (product && !!product.inCart) {
-        product.inCart = false;
-        product.quantity = 0;
-      }
-    },
-
     quantityPlus: (state, productID) => {
       const product = findProductByID(productID, state.products);
       if (product && !!product.inCart) {
@@ -62,7 +54,7 @@ export default new Vuex.Store({
       if (product && !!product.inCart) {
         product.quantity--;
         if (product.quantity < 1) {
-          this.removeProductFromCart(productID);
+          product.inCart = false;
         }
       }
     },
@@ -82,6 +74,23 @@ export default new Vuex.Store({
       );
       const data = response.then((res) => res.json());
       return data;
+    },
+  },
+
+  getters: {
+    getCartProducts: (state) => {
+      return state.products.filter((product) => !!product.inCart);
+    },
+    getFavoriteProducts: (state) => {
+      return state.products.filter((product) => !!product.isFavorite);
+    },
+    getCartSum: (state, getters) => {
+      const cart = getters.getCartProducts;
+      const sum = cart.reduce(
+        (sum, product) => sum + product.price * product.quantity,
+        0
+      );
+      return sum;
     },
   },
 });

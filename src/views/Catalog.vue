@@ -36,7 +36,6 @@ export default {
 <style>
 .cards {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   gap: 40px;
 }
