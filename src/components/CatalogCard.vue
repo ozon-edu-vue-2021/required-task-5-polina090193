@@ -16,7 +16,7 @@
       </button>
       <div v-if="inCart" class="card__counter">
         <button class="card__btn card__minus" @click="quantityMinus">-</button>
-        <span class="card__quant">{{ choosenQuantity }}</span>
+        <span class="card__quant">{{ quantity }}</span>
         <button class="card__btn card__plus" @click="quantityPlus">+</button>
       </div>
     </div>
@@ -35,7 +35,7 @@ export default {
 
   props: {
     productID: {
-      type: String,
+      type: Number,
       required: true,
     },
 
@@ -52,36 +52,41 @@ export default {
   data() {
     return {
       inCart: false,
-      choosenQuantity: 0,
-      isFavorite: false,
+      quantity: 0,
     };
   },
 
   computed: {
     price: () => Math.floor(Math.random() * 1000),
+    isFavorite() {
+      return !!this.$store.state.favoriteProducts.find((item) => {
+        return item.id === this.productID;
+      });
+    },
   },
 
   methods: {
     addToCart() {
       this.$store.commit("addProductToCart", {
         id: this.productID,
+        quantity: 1,
         title: this.title,
         image: this.image,
-        quantity: 1,
+        price: this.price,
       });
 
       this.inCart = true;
-      this.choosenQuantity = 1;
+      this.quantity = 1;
     },
 
     quantityPlus() {
       this.$store.commit("quantityPlus", this.productID);
-      this.choosenQuantity++;
+      this.quantity++;
     },
 
     quantityMinus() {
-      this.choosenQuantity--;
-      if (this.choosenQuantity < 1) {
+      this.quantity--;
+      if (this.quantity < 1) {
         this.$store.commit("removeProductFromCart", this.productID);
         this.inCart = false;
       } else {
@@ -90,8 +95,12 @@ export default {
     },
 
     toggleFavorite() {
-      this.isFavorite = !this.isFavorite;
-      
+      this.$store.commit("toggleFavoriteProduct", {
+        id: this.productID,
+        title: this.title,
+        image: this.image,
+        price: this.price,
+      });
     },
   },
 };
@@ -111,7 +120,6 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 50%;
-  object-fit: cover;
   padding: 20px;
 }
 

@@ -1,20 +1,24 @@
 <template>
-  <div class="cards">
-    <Card
-      v-for="product of products"
-      :key="product.id"
-      :image="
-        require('@/assets/images/' +
-          imagesNames[Math.floor(Math.random() * imagesNames.length)])
-      "
-      :title="product.dish"
-      :productID="product.id.toString()"
-    />
+  <div class="catalog">
+    <h1 class="page-title">Каталог</h1>
+
+    <div class="cards">
+      <Card
+        v-for="product of products"
+        :key="product.id"
+        :image="
+          require('@/assets/images/' +
+            imagesNames[Math.floor(Math.random() * imagesNames.length)])
+        "
+        :title="product.dish"
+        :productID="product.id"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import Card from "../components/Card.vue";
+import Card from "../components/CatalogCard.vue";
 
 export default {
   name: "Catalog",

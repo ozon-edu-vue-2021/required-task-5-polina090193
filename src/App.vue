@@ -77,4 +77,10 @@ body,
 .nav-link.router-link-exact-active {
   color: red;
 }
+
+.page-title {
+  font-size: 28px;
+  color: wheat;
+  font-weight: 700;
+}
 </style>

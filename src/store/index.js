@@ -17,11 +17,12 @@ export default new Vuex.Store({
 
   mutations: {
     setProducts: (state, products) => {
-      state.products = products
+      state.products = products;
     },
 
     addProductToCart: (state, product) => {
-      if (findProductIndexInArray(product.id, state.cartProducts) === -1) {
+      const index = findProductIndexInArray(product.id, state.cartProducts);
+      if (index === -1) {
         state.cartProducts.push(product);
       }
     },
@@ -42,7 +43,7 @@ export default new Vuex.Store({
     },
 
     toggleFavoriteProduct: (state, product) => {
-      const index = findProductIndexInArray(product.id, state.cartProducts);
+      const index = findProductIndexInArray(product.id, state.favoriteProducts);
       if (index === -1) {
         state.favoriteProducts.push(product);
       } else {
