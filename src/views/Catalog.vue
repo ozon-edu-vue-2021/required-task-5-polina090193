@@ -8,6 +8,7 @@
           imagesNames[Math.floor(Math.random() * imagesNames.length)])
       "
       :title="product.dish"
+      :productID="product.id.toString()"
     />
   </div>
 </template>
@@ -35,16 +36,13 @@ export default {
   },
 
   created() {
-    this.$store.dispatch("getProducts").then((res) => (this.products = res));
+    this.$store.dispatch("getProducts").then((res) => {
+      this.$store.commit("setProducts", res);
+      this.products = res;
+    });
   },
 
-  methods: {
-    getProducts() {
-      // console.log();
-      // const products = Promise.resolve(this.$store.dispatch("getProducts").then((res) => res))
-      // return products;
-    },
-  },
+  methods: {},
 };
 </script>
 
